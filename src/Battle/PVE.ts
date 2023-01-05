@@ -19,17 +19,14 @@ export default class PVE extends Battle {
     return this._monsters;
   }
 
-  private playerAttackMonsters() {
-    const { monsters } = this;
-    const monstersAlive = monsters.filter(({ lifePoints }) => lifePoints > 0);
-    this._playerOne.attack(monstersAlive[0]);
+  private playerAttackMonsters(monstersAlive: SimpleFighter[]): void {
+    this.playerOne.attack(monstersAlive[0]);
   }
 
-  private monstersAttackPlayer() {
-    const { playerOne, monsters } = this;
-    monsters.forEach((monster) => {
-      if (playerOne.lifePoints > 0) {
-        monster.attack(this._playerOne);
+  private monstersAttackPlayer(monstersAlive: SimpleFighter[]): void {
+    monstersAlive.forEach((monster) => {
+      if (this.playerOne.lifePoints > 0) {
+        monster.attack(this._playerOne); 
       }
     });
   }
