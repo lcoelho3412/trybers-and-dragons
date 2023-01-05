@@ -33,12 +33,15 @@ export default class PVE extends Battle {
 
   public fight(): number {
     const { playerOne, monsters } = this;
+    let monstersAlive = this.monsters;
+
     while (
       playerOne.lifePoints > 0
       && monsters.some(({ lifePoints }) => lifePoints > 0)
     ) {
-      this.playerAttackMonsters();
-      this.monstersAttackPlayer();
+      this.playerAttackMonsters(monstersAlive);
+      this.monstersAttackPlayer(monstersAlive);
+      monstersAlive = monsters.filter(({ lifePoints }) => lifePoints > 0);
     }
 
     return super.fight();
