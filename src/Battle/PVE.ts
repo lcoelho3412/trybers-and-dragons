@@ -1,17 +1,18 @@
 import Fighter, { SimpleFighter } from '../Fighter';
 import Battle from './Battle';
 
-class PVE extends Battle {
-  private _player01: Fighter;
+export default class PVE extends Battle {
+  private _playerOne: Fighter;
   private _monsters: SimpleFighter[];
-  constructor(player01: Fighter, monsters: SimpleFighter[]) {
-    super(player01);
-    this._player01 = player01;
+
+  constructor(playerOne: Fighter, monsters: SimpleFighter[]) {
+    super(playerOne);
+    this._playerOne = playerOne;
     this._monsters = monsters;
   }
 
-  public get player01(): Fighter {
-    return this._player01;
+  public get playerOne(): Fighter {
+    return this._playerOne;
   }
 
   public get monsters(): SimpleFighter[] {
@@ -19,29 +20,30 @@ class PVE extends Battle {
   }
 
   private playerAttackMonsters(monstersAlive: SimpleFighter[]): void {
-    this.player01.attack(monstersAlive[0]);
+    this.playerOne.attack(monstersAlive[0]);
   }
 
   private monstersAttackPlayer(monstersAlive: SimpleFighter[]): void {
     monstersAlive.forEach((monster) => {
-      if (this.player01.lifePoints > 0) {
-        monster.attack(this._player01); 
+      if (this.playerOne.lifePoints > 0) {
+        monster.attack(this._playerOne); 
       }
     });
   }
 
   public fight(): number {
-    const { player01, monsters } = this;
-    const monstersAlive = monsters.filter(({ lifePoints }) => lifePoints > 0);
+    const { playerOne, monsters } = this;
+    let monstersAlive = this.monsters;
+
     while (
-      player01.lifePoints > 0
+      playerOne.lifePoints > 0
       && monsters.some(({ lifePoints }) => lifePoints > 0)
     ) {
       this.playerAttackMonsters(monstersAlive);
       this.monstersAttackPlayer(monstersAlive);
+      monstersAlive = monsters.filter(({ lifePoints }) => lifePoints > 0);
     }
 
     return super.fight();
   }
 }
-export default PVE;
